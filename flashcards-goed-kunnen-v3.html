@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oefening: goed kunnen / niet goed kunnen</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding-top: 3rem;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .card {
+    perspective: 1000px;
+    width: 520px;   /* dubbel zo breed */
+    height: 320px;  /* dubbel zo hoog */
+    margin-bottom: 4rem; /* extra ruimte onder kaart */
+    cursor: pointer;
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .card.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    font-size: 2rem;   /* grote tekst */
+    font-weight: 700;  /* vetgedrukt */
+  }
+
+  .card-front {
+    background-color: #ffffff;
+    color: #333;
+  }
+
+  .card-back {
+    background-color: #4a90e2;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;     /* afstand onder kaart */
+    position: relative;
+  }
+
+  .arrow {
+    font-size: 3rem;
+    cursor: pointer;
+    user-select: none;
+    color: #4a90e2;
+    transition: color 0.3s;
+  }
+
+  .arrow:hover {
+    color: #1f5fbf;
+  }
+
+  .counter {
+    color: #555;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      width: 90vw;
+      height: 250px;
+    }
+    .card-front, .card-back {
+      font-size: 1.5rem;
+    }
+    .arrow {
+      font-size: 2.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>Oefening: goed kunnen / niet goed kunnen</h1>
+
+  <div class="card" id="card">
+    <div class="card-inner">
+      <div class="card-front"></div>
+      <div class="card-back"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <span class="arrow" id="prev">←</span>
+    <span class="counter" id="counter"></span>
+    <span class="arrow" id="next">→</span>
+  </div>
+
+<script>
+const flashcards = [
+  { front: "strijken - niet goed (ik)", back: "Ik kan niet goed strijken." },
+  { front: "koken - goed (jij)", back: "Jij kunt goed koken." },
+  { front: "tekenen - goed (hij)", back: "Hij kan goed tekenen." },
+  { front: "zingen - niet goed (zij - enkelvoud)", back: "Zij kan niet goed zingen." },
+  { front: "Nederlands spreken - goed (wij)", back: "Wij kunnen goed Nederlands spreken." },
+  { front: "zwijgen - niet goed (jullie)", back: "Jullie kunnen niet goed zwijgen." },
+  { front: "piano spelen - goed (zij - meervoud)", back: "Zij kunnen goed piano spelen." },
+  { front: "luisteren - goed (u)", back: "U kunt goed luisteren." },
+  { front: "voetballen - niet goed (jij)", back: "Jij kunt niet goed voetballen." },
+  { front: "studeren - niet goed (ik)", back: "Ik kan niet goed studeren." },
+  { front: "naaien - goed (wij)", back: "Wij kunnen goed naaien." },
+  { front: "zwemmen - niet goed (ik)", back: "Ik kan niet goed zwemmen." },
+  { front: "schilderen - goed (hij)", back: "Hij kan goed schilderen." },
+  { front: "bakken - goed (zij - enkelvoud)", back: "Zij kan goed bakken." },
+  { front: "autorijden - niet goed (u)", back: "U kunt niet goed autorijden." }
+];
+
+let current = 0;
+const card = document.getElementById('card');
+const front = card.querySelector('.card-front');
+const back = card.querySelector('.card-back');
+const counter = document.getElementById('counter');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+
+function showCard(index) {
+  card.classList.remove('flipped');
+  const { front: f, back: b } = flashcards[index];
+  front.textContent = f;
+  back.textContent = b;
+  counter.textContent = `${index + 1} / ${flashcards.length}`;
+}
+
+card.addEventListener('click', () => card.classList.toggle('flipped'));
+prev.addEventListener('click', () => {
+  current = (current - 1 + flashcards.length) % flashcards.length;
+  showCard(current);
+});
+next.addEventListener('click', () => {
+  current = (current + 1) % flashcards.length;
+  showCard(current);
+});
+
+showCard(current);
+</script>
+</body>
+</html>
